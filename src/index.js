@@ -4,9 +4,9 @@ import EqualizeHeights from './extensions/equalizeHeights'
 import EqualizeSides from './extensions/equalizeSides'
 import Toggle from './extensions/toggle'
 
-SymphonyJs.prototype.custom = Custom
-SymphonyJs.prototype.equalizeHeights = EqualizeHeights
-SymphonyJs.prototype.equalizeSides = EqualizeSides
-SymphonyJs.prototype.toggle = Toggle
+SymphonyJs.custom = Custom
+SymphonyJs.equalizeHeights = EqualizeHeights
+SymphonyJs.equalizeSides = EqualizeSides
+SymphonyJs.toggle = Toggle
 
 export default SymphonyJs
