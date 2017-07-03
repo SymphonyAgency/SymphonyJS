@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SymphoniJs</title>
+    <script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
+    <script src="dist/index.js"></script>
+</head>
+<body>
+    
+</body>
+<script type="text/javascript">
+    
+var symphony = SymphonyJs({
+    debug: true,
+    myval2: 'myval2'
+})
+
+symphony.myFunction({
+    myval:'it works',
+    windowEvents:'resize',
+    breakpoints: ['sm', 'md'],
+    onlyOnBreakpointChanged: true
+});
+
+
+</script>
+</html>
