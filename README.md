@@ -1,22 +1,79 @@
-#SymphonyJs
+#[name]
+[name] is a JavaScript  library that enables developers to run, rerun, and undo 
+functions across window breakpoints. 
 
-##Features
-* Add new functions to SymphonyJs
-* Run functions on window/jquery events
-* Run functions only on certain breakpoints
-* Run functions only if specific Dom Elements are found(pages)
-* Accessible class utility methods and variables
+##Installation
+Add to project using NPM
+```cli
+npm install [packagename]
+```
+Import into project
+```javascript
+import SymJs from '@thesymphonyagency/symphonyjs'
+```
 
-##Add new functions to SymphonyJs
+## Basic usage
 
-SymphonyJs is compiled using WebPack.  `src/index.js` is the entry point for the
-application.  The constructing function `SymphonyJs()` requires the actual symphony
-class from `src/symphonyFunctionsClass.js`, and then adds all `module.exports` from 
-`.js` files found in `src/extensions/` as new prototypes of the class.  Having these
-added as prototypes gives the extending functions access to the instance variables
-and methods.
+[name] comes with some built in functions, but the basic usage is as follows:
+```javascript
+    //for each use case, register functions before ready is called
+    
+    const functionSettings = {
+        windowEvents: ['ready', 'load','resize'],
+        breakpoints:['xs', 'sm', 'md', 'lg'],
+        dependency: 'body.home-page',
+        target: '.custom-class' //example function specific property
+    }
+    
+    symJs.functionName(functionSettings)
+    
+    /** 
+    *  In this case, the function will be run on ready, load and every resize event.
+    *  The function will also be running on every breakpoint.
+    *  The function will only run if body.home-page is found.
+    *  The function receives the custom property "target"
+    */
+```
 
-###Usage
+## Function settings
+Enqueued function settings control how and when functions are run.
+### `windowEvents`
+Controls which events the function will run on. 
+
+Accepts an array of the following options:
+- 'ready'
+- 'load'
+- 'resize'
+
+### `breakpoints`
+When the resize is included in windowEvents, this setting controls 
+which breakpoints the function will run on. Some functions may include 
+undo functionality which will remove their effects on non-activated breakpoints.
+
+Accepts an array of the following options:
+- 'xs'
+- 'sm'
+- 'md'
+- 'lg'
+
+### `dependency`
+This setting is determines whether or not the function is enqueued based 
+on whether or not the query returns any elements.
+
+Accepts a string that can be passed to `querySelectorAll`
+
+### `onlyOnBreakpointChanged`
+Including a function in the resize event will trigger a function to run a lot. 
+This setting will only allow the function to run when a breakpoint has changed.
+
+### `runOnce`
+Some functions may need to be run only once, yet still have a reset function for
+ inactive breakpoints. Setting this to `true` will run the function only one time 
+ upon entering an active breakpoint. If the reset function is called, then it 
+ will reactivate after reentering the active breakpoint range.
+
+## Extending
+TODO: Rewrite everything below that doesn't fit new model.
 
 1. Creates a new js file in `src/extensions`.
 2. Write your function as a key/value pair, or as a named function.
