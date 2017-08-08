@@ -14,31 +14,31 @@ import SymJs from '@thesymphonyagency/symphonyjs'
 
 ## Basic usage
 
-[name] comes with some built in functions, but the basic usage is as follows:
+[name] comes with some built in actions, but the basic usage is as follows:
 ```javascript
-    //for each use case, register functions before ready is called
+    //for each use case, register actions before ready is called
     
-    const functionSettings = {
+    const actionSettings = {
         windowEvents: ['ready', 'load','resize'],
         breakpoints:['xs', 'sm', 'md', 'lg'],
         dependency: 'body.home-page',
-        target: '.custom-class' //example function specific property
+        target: '.custom-class' //example action specific property
     }
     
-    symJs.functionName(functionSettings)
+    symJs.actionName(actionSettings)
     
     /** 
-    *  In this case, the function will be run on ready, load and every resize event.
-    *  The function will also be running on every breakpoint.
-    *  The function will only run if body.home-page is found.
-    *  The function receives the custom property "target"
+    *  In this case, the action will be run on ready, load and every resize event.
+    *  The action will also be running on every breakpoint.
+    *  The action will only run if body.home-page is found.
+    *  The action receives the custom property "target"
     */
 ```
 
-## Function settings
-Enqueued function settings control how and when functions are run.
+## action settings
+Enqueued action settings control how and when action functions are run.
 ### `windowEvents`
-Controls which events the function will run on. 
+Controls which events the action function will run on. 
 
 Accepts an array of the following options:
 - 'ready'
@@ -47,7 +47,7 @@ Accepts an array of the following options:
 
 ### `breakpoints`
 When the resize is included in windowEvents, this setting controls 
-which breakpoints the function will run on. Some functions may include 
+which breakpoints the action will run on. Some actions may include 
 undo functionality which will remove their effects on non-activated breakpoints.
 
 Accepts an array of the following options:
@@ -57,18 +57,18 @@ Accepts an array of the following options:
 - 'lg'
 
 ### `dependency`
-This setting is determines whether or not the function is enqueued based 
+This setting is determines whether or not the action is enqueued based 
 on whether or not the query returns any elements.
 
 Accepts a string that can be passed to `querySelectorAll`
 
 ### `onlyOnBreakpointChanged`
-Including a function in the resize event will trigger a function to run a lot. 
-This setting will only allow the function to run when a breakpoint has changed.
+Enqueing on resize will trigger a action to run a lot. 
+This setting will only allow the action to run when a breakpoint has changed.
 
 ### `runOnce`
-Some functions may need to be run only once, yet still have a reset function for
- inactive breakpoints. Setting this to `true` will run the function only one time 
+Some actions may need to be run only once, yet still have a reset function for
+ inactive breakpoints. Setting this to `true` will run the action only one time 
  upon entering an active breakpoint. If the reset function is called, then it 
  will reactivate after reentering the active breakpoint range.
 
