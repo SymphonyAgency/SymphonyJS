@@ -55,7 +55,7 @@ Accepts an array of the following options:
 - 'sm'
 - 'md'
 - 'lg'
-
+ 
 ### `dependency`
 This setting is determines whether or not the action is enqueued based 
 on whether or not the query returns any elements.
@@ -63,7 +63,7 @@ on whether or not the query returns any elements.
 Accepts a string that can be passed to `querySelectorAll`
 
 ### `onlyOnBreakpointChanged`
-Enqueing on resize will trigger a action to run a lot. 
+Enqueuing on resize will trigger a action to run a lot. 
 This setting will only allow the action to run when a breakpoint has changed.
 
 ### `runOnce`
