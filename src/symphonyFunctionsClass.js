@@ -4,22 +4,24 @@
  * added as prototypes to this class.
  */
 export default class SymphonyFunctions {
-    resizethrottleMs = 100;
-    currentBreakpoint = null;
-    breakpointRanges = {
-        xs: [0, 767],
-        sm: [768, 991],
-        md: [992, 1199],
-        lg: [1200, 9999],
-    };
-    readyQueue = [];
-    loadQueue = [];
-    resizeQueue = [];
-    windowWidth = null;
-    breakpointChanged = true;
-    $ = null;
+
 
     constructor(options) {
+        this.resizethrottleMs = 100;
+        this.currentBreakpoint = null;
+        this.breakpointRanges = {
+            xs: [0, 767],
+            sm: [768, 991],
+            md: [992, 1199],
+            lg: [1200, 9999],
+        };
+        this.readyQueue = [];
+        this.loadQueue = [];
+        this.resizeQueue = [];
+        this.windowWidth = null;
+        this.breakpointChanged = true;
+        this.$ = null;
+
         this.setOptions(options)
         this.initializeListeners()
     }
