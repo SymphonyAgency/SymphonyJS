@@ -7,6 +7,7 @@ export default class SymphonyFunctions {
 
 
     constructor(options) {
+        if(!options) options = {}
         this.resizethrottleMs = 100;
         this.currentBreakpoint = null;
         this.breakpointRanges = {
@@ -27,7 +28,7 @@ export default class SymphonyFunctions {
     }
 
     setOptions(options) {
-        this.resizethrottleMs = options.resizethrottleMS || this.resizethrottleMs
+        this.resizethrottleMs = options.resizethrottleMs || this.resizethrottleMs
         this.breakpointRanges = options.breakpointRanges || this.breakpointRanges
         this.$ = options.$ || window.jQuery || window.$
     }
@@ -48,7 +49,7 @@ export default class SymphonyFunctions {
         //On Resize - runResize abstracted out so that it can be run manually and be throttled.
         this.onResize(() => {
             this.runResize()
-        }, this.resizethrottleMS)
+        }, this.resizethrottleMs)
     }
 
     /**
@@ -216,9 +217,9 @@ export default class SymphonyFunctions {
         })
 
         return {
-            breakpointChanged,
+            breakpointChanged: this.breakpointChanged,
             breakpoint,
-            windowWidth
+            windowWidth: this.windowWidth
         }
     }
 

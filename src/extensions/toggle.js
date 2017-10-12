@@ -1,5 +1,4 @@
 export default function toggle(input) {
-	this.logGroup(input.debug, "toggle() setup")
 	this.processArrayOrType('object', input, (options) => {
 		//defaults
 		options.windowEvents = options.windowEvents || ['ready']
@@ -16,12 +15,10 @@ export default function toggle(input) {
 			})
 		}
 	})
-	this.logGroupEnd(input.debug)
 
 }
 
 function toggleRun(options) {
-	this.logGroup(options.debug, 'toggle() run')
 	let button = this.$(options.button)
 	let target = this.$(options.target)
 	let $ = this.$
@@ -52,12 +49,10 @@ function toggleRun(options) {
 	} else {
 		console.warn('SymphonyJs.toggle() both display and visibility are not set.  Shouldnt happen')
 	}
-	this.logGroupEnd(options.debug)
 
 }
 
 function toggleReset(options) {
-	this.logGroup(options.debug, 'toggle() run')
 	let button = this.$(options.button)
 	let target = this.$(options.target)
 
@@ -65,5 +60,4 @@ function toggleReset(options) {
 	target.each(function(){
 		this.removeAttribute('style');
 	})
-	this.logGroupEnd(options.debug)
 }

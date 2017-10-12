@@ -1,9 +1,7 @@
 export default function equalizeSides(input) {
-    this.logGroup(input.debug, 'equalizeSides() setup')
     this.processArrayOrType('object', input, (options) => {
         options.windowEvents = options.windowEvents || ['resize', 'load']
         if (this.domElementExists(options.target, options.source, options.dependency)) {
-            this.log(input.debug, 'dependencies exist')
             this.addToQueues({
                 func: equalizeSidesRun,
                 options: options,
@@ -12,13 +10,10 @@ export default function equalizeSides(input) {
             })
         }
     })
-    this.logGroupEnd(input.debug)
-
 }
 
 
 function equalizeSidesRun(options) {
-    this.logGroup(options.debug, 'equalizeSides() run')
     let targetList
     let source
     let sourceOffset
@@ -45,18 +40,13 @@ function equalizeSidesRun(options) {
         direction: options.direction || 'left',
         spacingProperty: options.spacingProperty || 'margin'
     }
-    this.log('Options determined: ', options)
 
     //get dom elements
     targetList = jQuery(options.target)
-    if (targetList.length === 0) return this.log(`Target not found ${ options.target }`)
-    this.log(`target items found ${targetList.length}:`, targetList)
     source = jQuery(options.source).first()
-    if (source.length === 0) return this.log(`Log not found ${source}`)
 
     targetList.each((index) => {
         var target = jQuery(targetList[index])
-        this.log(`Running on index ${index} of found items`, target)
             //construct the target spacing property.
         if (options.spacingProperty === 'left' || options.spacingProperty === 'right') {
             targetProperty = options.spacingProperty
@@ -69,17 +59,13 @@ function equalizeSidesRun(options) {
         } else {
             return console.error('equalizeSides() accepts target spacingProperty of: padding, margin, left, right, and width')
         }
-        this.log(`spacingProperty determined: ${targetProperty}`)
 
         //left or right handling.
         if (options.direction === 'left') {
-            this.log('modifying left side')
             sourceOffset = source.offset().left
             sourcePaddingLeft = parseInt(source.css('padding-left'))
             target.css(targetProperty, sourceOffset + sourcePaddingLeft)
-            this.log(`Left CSS modifications added. Total offset: ${sourceOffset + sourcePaddingLeft}`)
         } else if (options.direction === 'right') {
-            this.log('modifying right side')
             sourcePaddingRight = parseInt(source.css('padding-right'))
             sourceOffset = source.offset().left
             targetOffset = target.offset().left
@@ -90,22 +76,17 @@ function equalizeSidesRun(options) {
             let targetToRight = documentWidth - (targetOffset + targetWidth)
 
             if (targetProperty === 'margin-right') {
-                this.log('margin-right added')
                 target.css(targetProperty, sourceToRight)
             } else if (targetProperty === 'padding-right') {
                 target.css(targetProperty, sourceToRight + sourcePaddingRight)
-                this.log('padding-right added')
             } else if (targetProperty === 'width') {
                 target.css(targetProperty, targetWidth + (targetToRight - sourceToRight))
-                this.log('width added')
             } else if (targetProperty === 'widthPadding') {
                 target.css('width', targetWidth + (targetToRight - sourceToRight))
                 target.css('padding-right', sourcePaddingRight)
-                this.log('width and padding-right added')
             } else if (targetProperty === 'marginPadding') {
                 target.css('margin-right', sourceToRight)
                 target.css('padding-right', sourcePaddingRight)
-                this.log('margin-right and padding-right added')
             } else {
                 return console.error('equalizeSides() hopefully unreachable error in right side properties')
             }
@@ -115,12 +96,10 @@ function equalizeSidesRun(options) {
 
     })
 
-    this.logGroupEnd(options.debug)
 }
 
 //TODO
 function resetSides(options) {
-    this.logGroup(options.debug, 'equalizeSides() reset')
     let targetList
     let source
     let sourceOffset
@@ -150,14 +129,10 @@ function resetSides(options) {
 
    //get dom elements
     targetList = jQuery(options.target)
-    if (targetList.length === 0) return this.log(`Target not found ${ options.target }`)
-    this.log(`target items found ${targetList.length}:`, targetList)
     source = jQuery(options.source).first()
-    if (source.length === 0) return this.log(`Log not found ${source}`)
 
     targetList.each((index) => {
         var target = jQuery(targetList[index])
-        this.log(`Running on index ${index} of found items`, target)
             //construct the target spacing property.
         if (options.spacingProperty === 'left' || options.spacingProperty === 'right') {
             targetProperty = options.spacingProperty
@@ -192,9 +167,7 @@ function resetSides(options) {
             } else {
                 return console.error('equalizeSides() hopefully unreachable error in right side properties')
             }
-            this.log('Reset successful')
         }
     })
 
-    this.logGroupEnd(options.debug)
 }
