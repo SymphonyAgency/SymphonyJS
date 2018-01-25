@@ -73,7 +73,7 @@ Some actions may need to be run only once, yet still have a reset function for
 
 ## Built-in Extensions
 
-###`symJs.EqualizeHeights([action, ...])`
+### `symJs.EqualizeHeights([action, ...])`
 
 Set the height of elements to the tallest from a NodeList. Very useful for Bootstrap 3 grid columns!
 
