@@ -1,54 +1,175 @@
-export default function equalizeHeights(input) {
+export default function (input) {
     this.processArrayOrType('object', input, (options) => {
-        //defaults
         options.windowEvents = options.windowEvents || ['resize', 'load']
 
         if (this.domElementExists([options.selector, options.dependency])) {
+
             this.addToQueues({
-                func: equalizeHeightsRun,
+                func: equalizeHeights,
                 options: options,
                 reset: reset,
-                name: 'equalizeHeights'
+                name: 'equalizeHeights',
             })
         } else {
         }
     })
 }
 
-function equalizeHeightsRun(options) {
-    let columns = document.querySelectorAll(options.selector)
-    var countOfColumns = []
-    var heightsOfColumns = []
+/**
+ * EqualizeHeights class.
+ *
+ * Equalize heights among a NodeList.
+ *
+ * Cannot be a real "class" because SymphonyJs adds extension functions to the
+ * prototype, so this.equalizeHeights refers to SymphonyJs's context rather than
+ * the created class's.
+ *
+ * @param options
+ */
+function equalizeHeights(options) {
+	/**
+	 * Get tallest element from a NodeList.
+	 *
+	 * @param columns
+	 * @returns {*}
+	 */
+    function getTallestElementHeight(columns) {
+        let heights = []
 
-    for (var i = 0; i < columns.length; i++)
-        countOfColumns.push(0)
+        Array.prototype.forEach.call(columns, el => {
+            el.style.height = 'auto'
+            heights.push(el.clientHeight)
+        })
 
-    countOfColumns.forEach.call(columns, function (el, index, arr) {
-        arr[index].style.height = "auto"
-        heightsOfColumns.push([el, arr[index].clientHeight])
-    })
+        heights.sort((a, b) => b - a)
 
-    heightsOfColumns.sort(function (a, b) {
-        return b[1] - a[1]
-    })
+        return heights[0]
+    }
 
-    for (var column in columns) {
-        if (column < columns.length) {
-            for (var col in heightsOfColumns) {
-                if (heightsOfColumns[col][0] === columns[column]) {
-                    columns[column].style.height = heightsOfColumns[col][1] + "px"
+	/**
+	 * Set column heights.
+	 *
+	 * @param columns
+	 */
+    function setColumnHeights(columns, height) {
+        Array.prototype.forEach.call(columns, column => {
+            column.style.height = height + 'px'
+        })
+    }
+
+	/**
+	 * Equalize heights of elements in a NodeList.
+	 *
+	 * @param columns
+	 */
+    function equalizeHeights(columns) {
+        let height = getTallestElementHeight(columns)
+        setColumnHeights(columns, height)
+    }
+
+	/**
+	 * Equalize heights by using tallest sibling of selector's parent.
+	 *
+	 * @param column
+	 */
+    function useTallestSibling(column) {
+        let parentRefs = []
+
+        Array.prototype.forEach.call(columns, column => {
+            let parentRef = parentRefs.find(parent => {
+                return parent.ref === column.parentElement
+            })
+
+            if (parentRef) {
+                parentRef.columns.push(column)
+            } else {
+                parentRefs.push({
+                    ref: column.parentElement,
+                    columns: [column],
+                })
+            }
+        })
+        parentRefs.forEach(({ columns }) => equalizeHeights(columns))
+    }
+
+	/**
+	 * Equalize heights by using the tallest node sharing the same ancestor.
+	 *
+	 * @param column
+	 */
+    function useTallestFromAncestor(column) {
+        let parentRefs = []
+        let maxAncestors = options.useTallestFromAncestor.maxAncestors
+        let ancestor = options.useTallestFromAncestor.className
+        let newAncestor = null
+        let ancestorLevel
+
+        Array.prototype.forEach.call(columns, column => {
+            let parentRef = parentRefs.find(parent => {
+                let parentEl = column.parentElement
+                ancestorLevel = 0
+
+                while (ancestorLevel < maxAncestors) {
+                    if (parentEl === parent.ref) {
+                        return true
+                    } else if (parentEl.classList.contains(ancestor)) {
+                        newAncestor = parentEl
+                    } else {
+                        parentEl = parentEl.parentElement
+                    }
+                    ancestorLevel++
+                }
+            })
+
+            if (!newAncestor) {
+                let parentEl = column.parentElement
+                ancestorLevel = 0
+
+                while (ancestorLevel < maxAncestors) {
+                    if (parentEl.classList.contains(ancestor)) {
+                        newAncestor = parentEl
+                    } else {
+                        parentEl = parentEl.parentElement
+                    }
+                    ancestorLevel++
                 }
             }
-            columns[column].style.height = heightsOfColumns[0][1] + "px"
-        }
+
+            if (parentRef) {
+                parentRef.columns.push(column)
+            } else if (newAncestor) {
+                parentRefs.push({
+                    ref: newAncestor,
+                    columns: [column],
+                })
+            }
+        })
+
+        parentRefs.forEach(({ columns }) => equalizeHeights(columns))
+    }
+
+	/**
+	 * Run
+	 */
+    let columns = document.querySelectorAll(options.selector)
+
+    if (options.useTallestSibling) {
+        useTallestSibling(columns)
+    }
+    else if (options.useTallestFromAncestor) {
+        useTallestFromAncestor(columns)
+    } else {
+        equalizeHeights(columns)
     }
 }
 
+/**
+ * Reset heights.
+ *
+ * @param options
+ */
 function reset(options) {
     let columns = document.querySelectorAll(options.selector)
 
-    for (var column in columns)
-        if (column < columns.length)//necessary???
-            columns[column].style.height = ''
-
+    Array.prototype.forEach.call(columns, column => column.style.height = '')
 }
